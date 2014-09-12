@@ -42,7 +42,6 @@ class product_tare_groups extends base {
     {
       $shipping_weight = $this->original_shipping_weight;
       $cartProducts = $_SESSION['cart']->get_products();
-      var_dump($cartProducts);
       foreach($cartProducts as $product )
       {
         $product_id = (int)$product['id'];

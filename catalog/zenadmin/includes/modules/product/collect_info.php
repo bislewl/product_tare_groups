@@ -39,7 +39,7 @@ if (!defined('IS_ADMIN_FLAG')) {
                        'products_discount_type_from' => '0',
                        'products_price_sorter' => '0',
                        'master_categories_id' => '',
-                       'product_tare_group' => 'PRODUCT_TARE_GROUP_1'
+                       'product_tare_group' => 'PRODUCT_TARE_GROUP_1',
                        );
 
     $pInfo = new objectInfo($parameters);
@@ -55,13 +55,13 @@ if (!defined('IS_ADMIN_FLAG')) {
                                       p.products_quantity_order_min, p.products_quantity_order_units, p.products_priced_by_attribute,
                                       p.product_is_free, p.product_is_call, p.products_quantity_mixed,
                                       p.product_is_always_free_shipping, p.products_qty_box_status, p.products_quantity_order_max,
-                                      p.products_sort_order, pef.product_tare_group
+                                      p.products_sort_order, pef.product_tare_group,
                                       p.products_discount_type, p.products_discount_type_from,
                                       p.products_price_sorter, p.master_categories_id
                                from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, ". TABLE_PRODUCTS_EXTRA_FIELDS . " pef
                               where p.products_id = '" . (int)$_GET['pID'] . "'
-                              and p.products_id = pd.products_id
-                              and p.products_id = pef.products_id
+                              and p.products_id = pd.products_id 
+                              and p.products_id = pef.products_id 
                               and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
 
       $pInfo->objectInfo($product->fields);

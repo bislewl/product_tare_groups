@@ -74,6 +74,7 @@
       // BEGIN: product tare group
       $product_extra_fields_array = array('product_tare_group' => zen_db_prepare_input($_POST['product_tare_group']), 'products_id' => $products_id);
       zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, $product_extra_fields_array);
+
       // END: product tare group
 
       // reset products_price_sorter for searches etc.
@@ -99,8 +100,23 @@
 
 
       // BEGIN: product tare group
+
+      $products_extra_fields_id = null;
+      $products_extra_fields = $db->Execute('SELECT * from '.TABLE_PRODUCTS_EXTRA_FIELDS.' WHERE products_id='.$products_id);
+      while(!$products_extra_fields->EOF)
+      {
+        $products_extra_fields_id = $products_extra_fields->fields['id'];
+        $products_extra_fields->MoveNext();
+      }
       $product_extra_fields_array = array('product_tare_group' => zen_db_prepare_input($_POST['product_tare_group']), 'products_id' => $products_id);
-      zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, array('product_tare_group' => zen_db_prepare_input($_POST['product_tare_group'])), 'update', "products_id = '" . (int)$products_id . "'");
+      if($products_extra_fields_id)
+      {
+        zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, $product_extra_fields_array, 'update', "id= '" . (int)$products_extra_fields_id. "'");
+      }
+      else
+      {
+        zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, $product_extra_fields_array);
+      }
       // END: product tare group
 
       // reset products_price_sorter for searches etc.
