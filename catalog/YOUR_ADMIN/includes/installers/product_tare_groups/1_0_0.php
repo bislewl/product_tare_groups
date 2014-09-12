@@ -25,7 +25,14 @@ if ($zc150) { // continue Zen Cart 1.5.0
             'Y',
             $configuration_group_id);
 
-        $generic_description = "<br>What is the weight of typical packaging of small to medium packages?<br>Example: 10% + 1lb 10:1<br>10% + 0lbs 10:0<br>0% + 5lbs 0:5<br>0% + 0lbs 0:0<br>"; 
+        $messageStack->add('Enabled Product Tare Groups Configuration Menu.', 'success');
+      }
+    }
+
+  }
+}
+
+$generic_description = "<br>What is the weight of typical packaging of small to medium packages?<br>Example: 10% + 1lb 10:1<br>10% + 0lbs 10:0<br>0% + 5lbs 0:5<br>0% + 0lbs 0:0<br>"; 
         // add configuration group 
         $db->Execute("INSERT INTO ".TABLE_CONFIGURATION."  VALUES 
             (NULL, 'Product Tare Group 1', 'PRODUCT_TARE_GROUP_1', '0:2', '<b>Product Tare Group 1</b>".$generic_description."',".$configuration_group_id.", '15', NULL, NOW(), NULL, NULL),
@@ -37,10 +44,4 @@ if ($zc150) { // continue Zen Cart 1.5.0
 
         
         $db->Execute("CREATE TABLE ".TABLE_PRODUCTS_EXTRA_FIELDS." (id int primary key auto_increment not null, products_id int not null, product_tare_group varchar(255))");
-        $messageStack->add('Enabled Product Tare Groups Configuration Menu.', 'success');
-      }
-    }
-
-  }
-}
-
+        

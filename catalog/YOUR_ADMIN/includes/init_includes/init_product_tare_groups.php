@@ -11,7 +11,7 @@
  //Just change the stuff above... Nothing down here should need to change
  if(defined('PRODUCT_TARE_GROUPS_VERSION')) 
      { 
-        $current_version =  constant(PRODUCT_TARE_GROUPS_VERSION); 
+        $current_version =  PRODUCT_TARE_GROUPS_VERSION; 
      } 
      else { 
         $current_version = "0.0.0"; 
