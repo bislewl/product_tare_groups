@@ -30,38 +30,45 @@ class product_tare_groups extends base {
    * @param string $eventID
    */
   function update(&$class, $eventID, $paramsArray) {
-    global $messageStack;
-    global $db;
-    global $shipping_weight;
 
-    if($eventID == 'NOTIFY_SHIPPING_MODULE_PRE_CALCULATE_BOXES_AND_TARE')
+    if(get_class($class) == 'shipping')
     {
-      if($shipping_weight)
+      global $messageStack;
+      global $db;
+      global $shipping_weight;
+
+      if($eventID == 'NOTIFY_SHIPPING_MODULE_PRE_CALCULATE_BOXES_AND_TARE')
       {
-        $this->original_shipping_weight = $shipping_weight;
-      }
-    }
-    elseif($eventID == 'NOTIFY_SHIPPING_MODULE_CALCULATE_BOXES_AND_TARE')
-    {
-      $shipping_weight = $this->original_shipping_weight;
-      $cartProducts = $_SESSION['cart']->get_products();
-      foreach($cartProducts as $product )
-      {
-        $product_id = (int)$product['id'];
-        $sql = "SELECT product_tare_group from products_extra_fields WHERE products_id=".$product_id." LIMIT 1"; 
-        $product_tare_group = $db->Execute($sql);
-        while(!$product_tare_group->EOF)
+        if($shipping_weight)
         {
-          $ratio = preg_split('/[:,]/', $this->product_tare_group_array[$product_tare_group->fields['product_tare_group']]);
-          $percent = $ratio[0];
-          $weight = $ratio[1]; 
-          if($product['weight'] * $percent)
-          {
-            $shipping_weight = $shipping_weight + (($product['weight'] * $percent / 100) + $weight);
-          }
-          $product_tare_group->MoveNext();
+          $this->original_shipping_weight = $shipping_weight;
         }
       }
+      elseif($eventID == 'NOTIFY_SHIPPING_MODULE_CALCULATE_BOXES_AND_TARE')
+      {
+        $shipping_weight = $this->original_shipping_weight;
+        $cartProducts = $_SESSION['cart']->get_products();
+        foreach($cartProducts as $product )
+        {
+          $product_id = (int)$product['id'];
+          $qty = $_SESSION['cart']->contents[$product_id]['qty'];
+          $sql = "SELECT product_tare_group from products_extra_fields WHERE products_id=".$product_id." LIMIT 1"; 
+          $product_tare_group = $db->Execute($sql);
+          while(!$product_tare_group->EOF)
+          {
+            $ratio = preg_split('/[:,]/', $this->product_tare_group_array[$product_tare_group->fields['product_tare_group']]);
+            $percent = $ratio[0];
+            $weight = $ratio[1]; 
+            if($product['weight'] * $percent)
+            {
+              $shipping_weight = $shipping_weight + ((($product['weight'] * $percent / 100) + $weight) * $qty);
+            }
+            $product_tare_group->MoveNext();
+          }
+        }
+      }
+
+      //echo $shipping_weight;
     }
 
     return;
