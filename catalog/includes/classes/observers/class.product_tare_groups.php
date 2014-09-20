@@ -13,7 +13,7 @@ class product_tare_groups extends base {
     global $db;
     $zco_notifier->attach($this, array('NOTIFY_SHIPPING_MODULE_PRE_CALCULATE_BOXES_AND_TARE','NOTIFY_SHIPPING_MODULE_CALCULATE_BOXES_AND_TARE'));
     $this->original_shipping_weight = 0;
-    $configuration = $db->Execute("SELECT configuration_key, configuration_value FROM configuration WHERE configuration_key like 'PRODUCT_TARE_GROUP_%'");
+    $configuration = $db->Execute("SELECT configuration_key, configuration_value FROM ".TABLE_CONFIGURATION." WHERE configuration_key like 'PRODUCT_TARE_GROUP_%'");
     $this->product_tare_group_array = null;
     while(!$configuration->EOF)
     {
@@ -52,7 +52,7 @@ class product_tare_groups extends base {
         {
           $product_id = (int)$product['id'];
           $qty = $_SESSION['cart']->contents[$product_id]['qty'];
-          $sql = "SELECT product_tare_group from products_extra_fields WHERE products_id=".$product_id." LIMIT 1"; 
+          $sql = "SELECT ".TABLE_PRODUCTS_EXTRA_FIELDS." from products_extra_fields WHERE products_id=".$product_id." LIMIT 1"; 
           $product_tare_group = $db->Execute($sql);
           while(!$product_tare_group->EOF)
           {
