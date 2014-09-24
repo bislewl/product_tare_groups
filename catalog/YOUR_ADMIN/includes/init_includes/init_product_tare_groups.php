@@ -3,6 +3,25 @@
     die('Illegal Access');
   }   
  
+  //bof field check function
+   if (!function_exists('chk_field_column_exists')) {
+    function chk_field_column_exists($tableName,$columnName){
+        global $db;
+      $tableFields = $db->metaColumns($tableName);
+      $columnName = strtoupper($columnName);
+      foreach($tableFields as $key=>$value) 
+      {    
+          if($key == $columnName){
+              return true;
+          }
+      }
+      return false;
+      
+    }
+  }
+  //eof field check function
+  
+  
  $module_constant = 'PRODUCT_TARE_GROUPS_VERSION';
  $module_installer_directory =  DIR_FS_ADMIN.'includes/installers/product_tare_groups';
  $module_name = "Product Tare Groups"; 

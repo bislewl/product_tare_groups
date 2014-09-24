@@ -22,17 +22,13 @@ if ($zc150) { // continue Zen Cart 1.5.0
   }
 }
 
-$generic_description = "<br>What is the weight of typical packaging of small to medium packages?<br>Example: 10% + 1lb 10:1<br>10% + 0lbs 10:0<br>0% + 5lbs 0:5<br>0% + 0lbs 0:0<br>"; 
+$generic_description = "Enter the desired tare as percent and or lbs for this group.<br>Example: 10% + 1lb 10:1<br>10% + 0lbs 10:0<br>0% + 5lbs 0:5<br>0% + 0lbs 0:0<br>"; 
       // add configuration group 
       $db->Execute("INSERT INTO ".TABLE_CONFIGURATION."  (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added)  VALUES 
-          ('Product Tare Group 1', 'PRODUCT_TARE_GROUP_1', '0:2', '<b>Product Tare Group 1</b>".$generic_description."',".$configuration_group_id.", '15', NOW(), NOW()),
-          ('Product Tare Group 2', 'PRODUCT_TARE_GROUP_2', '0:4', '<b>Product Tare Group 2</b>".$generic_description."',".$configuration_group_id.", '20', NOW(), NOW()),
-          ('Product Tare Group 3', 'PRODUCT_TARE_GROUP_3', '0:6', '<b>Product Tare Group 3</b>".$generic_description."',".$configuration_group_id.", '30', NOW(), NOW()),
-          ('Product Tare Group 4', 'PRODUCT_TARE_GROUP_4', '0:8', '<b>Product Tare Group 4</b>".$generic_description."',".$configuration_group_id.", '40', NOW(), NOW()),
-          ('Product Tare Group 5', 'PRODUCT_TARE_GROUP_5', '0:10', '<b>Product Tare Group 5</b>".$generic_description."',".$configuration_group_id.", '50', NOW(), NOW())
+          ('Product Tare Group 1', 'PRODUCT_TARE_GROUP_1', '0:2', '".$generic_description."',".$configuration_group_id.", '15', NOW(), NOW()),
+          ('Product Tare Group 2', 'PRODUCT_TARE_GROUP_2', '0:4', '".$generic_description."',".$configuration_group_id.", '20', NOW(), NOW()),
+          ('Product Tare Group 3', 'PRODUCT_TARE_GROUP_3', '0:6', '".$generic_description."',".$configuration_group_id.", '30', NOW(), NOW()),
+          ('Product Tare Group 4', 'PRODUCT_TARE_GROUP_4', '0:8', '".$generic_description."',".$configuration_group_id.", '40', NOW(), NOW()),
+          ('Product Tare Group 5', 'PRODUCT_TARE_GROUP_5', '0:10', '".$generic_description."',".$configuration_group_id.", '50', NOW(), NOW())
           ");
-
-
-      $db->Execute("CREATE TABLE ".TABLE_PRODUCTS_EXTRA_FIELDS." (id int primary key auto_increment not null, products_id int not null, product_tare_group varchar(255))");
-      
 

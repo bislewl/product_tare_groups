@@ -39,7 +39,7 @@ if (!defined('IS_ADMIN_FLAG')) {
                        'products_discount_type_from' => '0',
                        'products_price_sorter' => '0',
                        'master_categories_id' => '',
-                       'product_tare_group' => 'PRODUCT_TARE_GROUP_1',
+                       'products_tare_group' => ''
                        );
 
     $pInfo = new objectInfo($parameters);
@@ -55,13 +55,12 @@ if (!defined('IS_ADMIN_FLAG')) {
                                       p.products_quantity_order_min, p.products_quantity_order_units, p.products_priced_by_attribute,
                                       p.product_is_free, p.product_is_call, p.products_quantity_mixed,
                                       p.product_is_always_free_shipping, p.products_qty_box_status, p.products_quantity_order_max,
-                                      p.products_sort_order, pef.product_tare_group,
+                                      p.products_sort_order,
                                       p.products_discount_type, p.products_discount_type_from,
-                                      p.products_price_sorter, p.master_categories_id
-                               from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, ". TABLE_PRODUCTS_EXTRA_FIELDS . " pef
+                                      p.products_price_sorter, p.master_categories_id, p.products_tare_group 
+                              from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd
                               where p.products_id = '" . (int)$_GET['pID'] . "'
-                              and p.products_id = pd.products_id 
-                              and p.products_id = pef.products_id 
+                              and p.products_id = pd.products_id
                               and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
 
       $pInfo->objectInfo($product->fields);
@@ -484,26 +483,21 @@ updateGross();
             <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15') . '&nbsp;' . zen_draw_input_field('products_weight', $pInfo->products_weight); ?></td>
           </tr>
           <tr>
-            <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
-          </tr>
-          <!-- BEGIN: product tare group -->
-          <tr>
-            <td class="main"><?php echo 'Product Tare Group'; ?></td>
+            <td class="main"><?php echo TEXT_PRODUCT_TARE_GROUPS; ?></td>
             <?php
-              $product_tare_group_values = array(
-                array('id' => 'PRODUCT_TARE_GROUP_1', 'text' => 'Product Tare Group 1'),
-                array('id' => 'PRODUCT_TARE_GROUP_2', 'text' => 'Product Tare Group 2'),
-                array('id' => 'PRODUCT_TARE_GROUP_3', 'text' => 'Product Tare Group 3'),
-                array('id' => 'PRODUCT_TARE_GROUP_4', 'text' => 'Product Tare Group 4'),
-                array('id' => 'PRODUCT_TARE_GROUP_5', 'text' => 'Product Tare Group 5'),
-              );
+            $tare_group_array = array(
+                array('id' => '1', 'text' => 'Product Tare Group 1'),
+                array('id' => '2', 'text' => 'Product Tare Group 2'),
+                array('id' => '3', 'text' => 'Product Tare Group 3'),
+                array('id' => '4', 'text' => 'Product Tare Group 4'),
+                array('id' => '5', 'text' => 'Product Tare Group 5'),
+            );
             ?>
-            <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15') . '&nbsp;' . zen_draw_pull_down_menu('product_tare_group', $product_tare_group_values, $pInfo->product_tare_group); ?></td>
+            <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15') . '&nbsp;' . zen_draw_pull_down_menu('products_tare_group', $tare_group_array ,$pInfo->products_tare_group); ?></td>
           </tr>
           <tr>
             <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
-          <!-- END: product tare group -->
           <tr>
             <td class="main"><?php echo TEXT_PRODUCTS_SORT_ORDER; ?></td>
             <td class="main"><?php echo zen_draw_separator('pixel_trans.gif', '24', '15') . '&nbsp;' . zen_draw_input_field('products_sort_order', $pInfo->products_sort_order); ?></td>

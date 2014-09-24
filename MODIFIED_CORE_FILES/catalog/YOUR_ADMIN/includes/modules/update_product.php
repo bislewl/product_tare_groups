@@ -49,7 +49,8 @@
                             'products_sort_order' => (int)zen_db_prepare_input($_POST['products_sort_order']),
                             'products_discount_type' => zen_db_prepare_input($_POST['products_discount_type']),
                             'products_discount_type_from' => zen_db_prepare_input($_POST['products_discount_type_from']),
-                            'products_price_sorter' => zen_db_prepare_input($_POST['products_price_sorter'])
+                            'products_price_sorter' => zen_db_prepare_input($_POST['products_price_sorter']),
+                            'products_tare_group' => zen_db_prepare_input($_POST['products_tare_group'])
                             );
 
     // when set to none remove from database
@@ -71,12 +72,6 @@
       zen_db_perform(TABLE_PRODUCTS, $sql_data_array);
       $products_id = zen_db_insert_id();
 
-      // BEGIN: product tare group
-      $product_extra_fields_array = array('product_tare_group' => zen_db_prepare_input($_POST['product_tare_group']), 'products_id' => $products_id);
-      zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, $product_extra_fields_array);
-
-      // END: product tare group
-
       // reset products_price_sorter for searches etc.
       zen_update_products_price_sorter($products_id);
 
@@ -97,27 +92,6 @@
       $sql_data_array = array_merge($sql_data_array, $update_sql_data);
 
       zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = '" . (int)$products_id . "'");
-
-
-      // BEGIN: product tare group
-
-      $products_extra_fields_id = null;
-      $products_extra_fields = $db->Execute('SELECT * from '.TABLE_PRODUCTS_EXTRA_FIELDS.' WHERE products_id='.$products_id);
-      while(!$products_extra_fields->EOF)
-      {
-        $products_extra_fields_id = $products_extra_fields->fields['id'];
-        $products_extra_fields->MoveNext();
-      }
-      $product_extra_fields_array = array('product_tare_group' => zen_db_prepare_input($_POST['product_tare_group']), 'products_id' => $products_id);
-      if($products_extra_fields_id)
-      {
-        zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, $product_extra_fields_array, 'update', "id= '" . (int)$products_extra_fields_id. "'");
-      }
-      else
-      {
-        zen_db_perform(TABLE_PRODUCTS_EXTRA_FIELDS, $product_extra_fields_array);
-      }
-      // END: product tare group
 
       // reset products_price_sorter for searches etc.
       zen_update_products_price_sorter((int)$products_id);
@@ -222,3 +196,4 @@
     $messageStack->add_session(ERROR_NO_DATA_TO_SAVE, 'error');
     zen_redirect(zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . (isset($_POST['search']) ? '&search=' . $_POST['search'] : '') ));
   }
+  

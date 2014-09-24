@@ -12,15 +12,7 @@ class product_tare_groups extends base {
     global $zco_notifier;
     global $db;
     $zco_notifier->attach($this, array('NOTIFY_SHIPPING_MODULE_PRE_CALCULATE_BOXES_AND_TARE','NOTIFY_SHIPPING_MODULE_CALCULATE_BOXES_AND_TARE'));
-    $this->original_shipping_weight = 0;
-    $configuration = $db->Execute("SELECT configuration_key, configuration_value FROM ".TABLE_CONFIGURATION." WHERE configuration_key like 'PRODUCT_TARE_GROUP_%'");
-    $this->product_tare_group_array = null;
-    while(!$configuration->EOF)
-    {
-      $this->product_tare_group_array[$configuration->fields['configuration_key']] = $configuration->fields['configuration_value'];
-      $configuration->MoveNext();
     }
-  }
   /**
    * Update Method
    *
@@ -52,17 +44,20 @@ class product_tare_groups extends base {
         {
           $product_id = (int)$product['id'];
           $qty = $_SESSION['cart']->contents[$product_id]['qty'];
-          $sql = "SELECT ".TABLE_PRODUCTS_EXTRA_FIELDS." from products_extra_fields WHERE products_id=".$product_id." LIMIT 1"; 
+          $sql = "SELECT products_tare_group FROM ".TABLE_PRODUCTS." WHERE products_id=".$product_id." LIMIT 1"; 
           $product_tare_group = $db->Execute($sql);
           while(!$product_tare_group->EOF)
           {
-            $ratio = preg_split('/[:,]/', $this->product_tare_group_array[$product_tare_group->fields['product_tare_group']]);
-            $percent = $ratio[0];
-            $weight = $ratio[1]; 
-            if($product['weight'] * $percent)
-            {
-              $shipping_weight = $shipping_weight + ((($product['weight'] * $percent / 100) + $weight) * $qty);
+            if($product_tare_group->fields['products_tare_group'] == ''){
+                $tare_group = 1;
             }
+            else{
+                $tare_group = $product_tare_group->fields['products_tare_group'];
+            }
+            $ratio = explode(":", constant('PRODUCT_TARE_GROUP_'.$tare_group));
+            $percent = 100 + $ratio[0];
+            $weight = $ratio[1]; 
+            $shipping_weight = $shipping_weight + ((($product['weight'] * $percent / 100) + $weight) * $qty);
             $product_tare_group->MoveNext();
           }
         }

@@ -23,10 +23,9 @@ if (!defined('IS_ADMIN_FLAG')) {
                                       p.products_quantity_order_min, p.products_quantity_order_units, p.products_priced_by_attribute,
                                       p.product_is_free, p.product_is_call, p.products_quantity_mixed,
                                       p.product_is_always_free_shipping, p.products_qty_box_status, p.products_quantity_order_max,
-                    p.products_sort_order, pef.product_tare_group
-                               from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, ". TABLE_PRODUCTS_EXTRA_FIELDS . " pef
+                    p.products_sort_order, products_tare_group
+                               from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd
                                where p.products_id = pd.products_id
-                               and p.products_id = pef.products_id
                                and p.products_id = '" . (int)$_GET['pID'] . "'");
 
       $pInfo = new objectInfo($product->fields);
@@ -168,4 +167,3 @@ if (!defined('IS_ADMIN_FLAG')) {
     </table></form>
 <?php
     }
-?>
