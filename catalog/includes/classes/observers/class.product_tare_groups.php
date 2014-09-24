@@ -39,7 +39,6 @@ class product_tare_groups extends base {
       elseif($eventID == 'NOTIFY_SHIPPING_MODULE_CALCULATE_BOXES_AND_TARE')
       {
         $cartProducts = $_SESSION['cart']->get_products();
-        print_r($cartProducts);
         $shipping_weight = 0;
         foreach($cartProducts as $product )
         {
@@ -57,11 +56,8 @@ class product_tare_groups extends base {
             $percent = 100 + $ratio[0];
             $weight = $ratio[1]; 
             $shipping_weight = $shipping_weight + ((($product['weight'] * $percent / 100) + $weight) * $qty);
-            echo "weight".$shipping_weight.";";
         }
       }
-
-      //echo $shipping_weight;
     }
 
     return;
