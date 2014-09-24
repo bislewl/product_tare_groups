@@ -38,16 +38,15 @@ class product_tare_groups extends base {
       }
       elseif($eventID == 'NOTIFY_SHIPPING_MODULE_CALCULATE_BOXES_AND_TARE')
       {
-        $shipping_weight = $this->original_shipping_weight;
         $cartProducts = $_SESSION['cart']->get_products();
+        print_r($cartProducts);
+        $shipping_weight = 0;
         foreach($cartProducts as $product )
         {
-          $product_id = (int)$product['id'];
-          $qty = $_SESSION['cart']->contents[$product_id]['qty'];
-          $sql = "SELECT products_tare_group FROM ".TABLE_PRODUCTS." WHERE products_id=".$product_id." LIMIT 1"; 
-          $product_tare_group = $db->Execute($sql);
-          while(!$product_tare_group->EOF)
-          {
+          $base_product_id = explode(":",$product['id']);
+          $product_id = (int)$base_product_id[0];
+          $qty = $product['quantity'];
+          $product_tare_group = $db->Execute("SELECT products_tare_group FROM ".TABLE_PRODUCTS." WHERE products_id=".$product_id." LIMIT 1");
             if($product_tare_group->fields['products_tare_group'] == ''){
                 $tare_group = 1;
             }
@@ -58,8 +57,7 @@ class product_tare_groups extends base {
             $percent = 100 + $ratio[0];
             $weight = $ratio[1]; 
             $shipping_weight = $shipping_weight + ((($product['weight'] * $percent / 100) + $weight) * $qty);
-            $product_tare_group->MoveNext();
-          }
+            echo "weight".$shipping_weight.";";
         }
       }
 
