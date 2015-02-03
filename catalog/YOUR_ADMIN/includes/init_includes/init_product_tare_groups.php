@@ -12,7 +12,6 @@ $zencart_com_plugin_id = 1916; // from zencart.com plugins - Leave Zero not to c
 //Just change the stuff above... Nothing down here should need to change
 
 
-
 $configuration_group_id = '';
 if (defined($module_constant)) {
     $current_version = constant($module_constant);
@@ -49,6 +48,7 @@ if (version_compare($newest_version, $current_version) > 0) {
 }
 
 
+
 if (!function_exists('plugin_version_check_for_updates')) {
 
     function plugin_version_check_for_updates($fileid = 0, $version_string_to_check = '') {
@@ -76,13 +76,11 @@ if (!function_exists('plugin_version_check_for_updates')) {
 
 }
 
-
-// Version Checking 
+ // Version Checking 
 if ($zencart_com_plugin_id != 0) {
     $new_version_details = plugin_version_check_for_updates($zencart_com_plugin_id, $current_version);
-    if ($_GET['gID'] == $configuration_group_id) {
+    if ($_GET['gID'] == $configuration_group_id && $new_version_details != FALSE) {
         $messageStack->add("Version " . $new_version_details['latest_plugin_version'] . " of " . $new_version_details['title'] . ' is available at <a href="' . $new_version_details['link'] . '" target="_blank">[Details]</a>', 'caution');
     }
 }
- 
- 
+
