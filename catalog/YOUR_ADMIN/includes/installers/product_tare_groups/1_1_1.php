@@ -1,0 +1,3 @@
+<?php
+
+// updated uninstall.sql
